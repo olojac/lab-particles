@@ -1,8 +1,6 @@
 use crate::types::{Line, Position};
 
 pub struct Bounds {
-    pub width: f64,
-    pub height: f64,
     pub top: Line,
     pub bottom: Line,
     pub left: Line,
@@ -12,8 +10,6 @@ pub struct Bounds {
 impl Bounds {
     pub fn new(width: f64, height: f64) -> Self {
         Self {
-            width,
-            height,
             top: (Position::new(0.0, 0.0), Position::new(width, 0.0)),
             bottom: (Position::new(width, height), Position::new(0.0, height)),
             left: (Position::new(0.0, height), Position::new(0.0, 0.0)),
