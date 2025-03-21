@@ -1,9 +1,9 @@
 use crate::{bounds::Bounds, gravity::Gravity, particle::Particle, types::Position};
 use colorgrad::{Gradient, LinearGradient};
 
-const TRAIL_LENGTH: u32 = 20;
-const NUM_PARTICLES: usize = 100;
-const GRAVITY_STRENGTH: f64 = 500000.0;
+const TRAIL_LENGTH: u32 = 100;
+const NUM_PARTICLES: usize = 10;
+const GRAVITY_STRENGTH: f64 = 300000.0;
 
 pub struct World {
     width: f64,
@@ -27,11 +27,11 @@ impl World {
             particles: initialize_particles(NUM_PARTICLES, width as i32, height as i32),
             trail_particles: vec![],
             speed_colors: colorgrad::GradientBuilder::new()
-                .html_colors(&["deeppink", "gold", "seagreen"])
+                .html_colors(&["#ff006e", "#ffc882"])
                 .build::<colorgrad::LinearGradient>()
                 .unwrap(),
             trail_colors: colorgrad::GradientBuilder::new()
-                .html_colors(&["black", "darkred", "deeppink"])
+                .html_colors(&["#2a2430", "#9e379c", "#ff006e"])
                 .build::<colorgrad::LinearGradient>()
                 .unwrap(),
 
@@ -78,8 +78,9 @@ impl World {
         self.particles.iter().for_each(|particle| {
             let idx = idx(particle, self.width);
             let speed = particle.velocity.norm();
-            let color = self.speed_colors.at((speed / 50.0) as f32).to_rgba8();
-            frame[idx..(idx + 4)].copy_from_slice(&color);
+            let color = self.speed_colors.at((speed / 100.0) as f32).to_rgba8();
+
+            self.draw_dot(idx, &color, frame);
         });
 
         self.trail_particles.iter().for_each(|particle| {
@@ -88,7 +89,27 @@ impl World {
                 .trail_colors
                 .at(particle.ttl as f32 / TRAIL_LENGTH as f32)
                 .to_rgba8();
-            frame[idx..(idx + 4)].copy_from_slice(&color);
+
+            self.draw_dot(idx, &color, frame);
+        });
+    }
+
+    fn draw_dot(&self, center_idx: usize, color: &[u8; 4], frame: &mut [u8]) {
+        let ids: Vec<usize> = [
+            Some(center_idx + (self.width as usize * 4)),
+            Some(center_idx + 4),
+            Some(center_idx),
+            center_idx.checked_sub(4),
+            center_idx.checked_sub(self.width as usize * 4),
+        ]
+        .iter()
+        .filter_map(|&x| x)
+        .collect();
+
+        ids.iter().for_each(|&id| {
+            if (id + 4) < frame.len() {
+                frame[id..(id + 4)].copy_from_slice(color);
+            }
         });
     }
 }
