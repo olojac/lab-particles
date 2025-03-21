@@ -11,20 +11,22 @@ pub struct Particle {
     pub ttl: u32,
 }
 
-impl Particle {
-    pub fn new() -> Self {
+impl Default for Particle {
+    fn default() -> Self {
         Self {
             position: Position::new(0.0, 0.0),
             velocity: Velocity::identity(),
             ttl: 1,
         }
     }
+}
 
+impl Particle {
     pub fn new_trail(position: Position, ttl: u32) -> Self {
         Self {
             position,
-            velocity: Velocity::identity(),
             ttl,
+            ..Default::default()
         }
     }
 

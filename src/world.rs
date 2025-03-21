@@ -94,7 +94,7 @@ impl World {
 }
 
 fn initialize_particles(count: usize, width: i32, height: i32) -> Vec<Particle> {
-    let mut particles = vec![Particle::new(); count];
+    let mut particles = vec![Particle::default(); count];
 
     particles.iter_mut().for_each(|particle| {
         particle.position.x = rand::random_range(0..width) as f64;
