@@ -7,5 +7,7 @@ A small lab simulating some particles affected by gravity. Done in rust only usi
 ## The similation in action
 ![particles](https://github.com/user-attachments/assets/d0bd717d-e2ff-4361-a4fe-a732586f0d24)
 
+*The are some artifacts intoduced by the video recording and gif convertion*
+
 ## How to compile and run
 Setup rust and run `cargo run --release`
